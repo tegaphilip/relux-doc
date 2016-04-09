@@ -2,52 +2,39 @@
 # as a demonstration of an API spec in YAML
 swagger: "2.0"
 info:
-  title: Uber API
-  description: Move your app forward with the Uber API
+  title: Relux Service API
+  description: The Services that powers the relux android app
   version: "1.0.0"
 # the domain of the service
-host: api.uber.com
+host: relux-service.herokuapp.com
 # array of all schemes that your API supports
 schemes:
   - https
 # will be prefixed to all paths
-basePath: /v1
-securityDefinitions:
-  apikey:
-    type: apiKey
-    name: server_token
-    in: query
+basePath: /api
 produces:
   - application/json
 paths:
-  /products:
+  /stops:
     get:
-      summary: Product Types
-      description: The Products endpoint returns information about the Uber products offered at a given location. The response includes the display name and other details about each product, and lists the products in the proper display order.
+      summary: Get List of Stops in Luxembourg
+      description: This endpoint shows the list of stops in luxembourg
       parameters:
-        - name: latitude
+        - name: paginate
           in: query
-          description: Latitude component of location.
-          required: true
-          type: number
-          format: double
-        - name: longitude
-          in: query
-          description: Longitude component of location.
-          required: true
-          type: number
-          format: double
-      security: 
-        - apikey: []
+          description: Set whether to paginate the endpoint or not
+          required: false
+          type: integer
+          format: int32
       tags: 
-        - Products
+        - Stops
       responses:  
         "200":
-          description: An array of products
+          description: An array of stops
           schema:
             type: array
             items:
-              $ref: '#/definitions/Product'
+              $ref: '#/definitions/Stops'
         default:
           description: Unexpected error
           schema:
@@ -175,6 +162,26 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 definitions:
+  Stops:
+    properties:
+      id:
+        type: integer
+        description: Unique identifier
+      stop_id:
+        type: integer
+        description: User generated unique identifier
+      stop_code:
+        type: string
+        description: Code
+      stop_name:
+        type: string
+        description: Display name of stop.
+      stop_lat:
+        type: number
+        description: Latitude
+      stop_lon:
+        type: number
+        description: Longitude
   Product:
     properties:
       product_id:
